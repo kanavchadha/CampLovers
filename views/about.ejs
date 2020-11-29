@@ -1,0 +1,73 @@
+<%- include("partials/header") %>
+<style>
+
+	div.fmsg{
+		margin-top: 70px;
+	} 
+	
+	@media (max-width: 800px){
+		div.fmsg{
+			margin-top: 58px;
+		} 
+	}
+
+	div.abt{
+		margin: 0 !important;
+	}
+	hr{
+		background: grey;
+	}
+</style>
+
+<div class="abt">
+	<div class="jumbotron mx-0 about">
+		<h1 style="text-decoration: underline; color: white; text-shadow: 0 2px 10px black;
+		font-weight: bold;" class="text-center aboutus">About Us</h1>
+	</div>
+	<div class="row abtext text-center">
+		<div class="rmpad col-12 col-lg-4">
+			<div class="card border-primary" data-aos="zoom-in" data-aos-duration="800"> 
+			<img class="myimg" src="https://res.cloudinary.com/dzzb5loan/image/upload/v1585218244/aeslfrjrp1oqw3v9rwvn.jpg">
+			</div>
+		</div>
+
+		<div class="rmpad col-12 col-lg-8">
+			<div class="abtme px-3" data-aos="fade-up" data-aos-duration="1000">
+			<h1 style="color: #d42441; font-weight: bold;" class="abtnam"> Kanav Chadha</h1>
+			<h4 style="color: #757171; font-weight: bold;" class="pb-2 desig">Full Stack Web-developer</h4>
+			<div class=" pb-4">
+			<i class="fa about fa-facebook"> </i>
+			<i class="fa about fa-instagram"> </i>
+			<i class="fa about fa-whatsapp"> </i>
+				</div>
+			</div> 
+			<hr> 
+			<p class="mt-3 pb-5 mx-2 myself" data-aos="slide-right" data-aos-duration="800">
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. </p>
+		</div>
+	</div>
+	<div class="jumbotron thanks mb-5" data-aos="slide-right" data-aos-duration="800">
+		<div class="row">
+			<div class="rmpad col-12 col-lg-6">
+				<div class="pic">
+					<h4 class="text-center mytagline">
+						Passion, dedication, and a lot of Music.
+					</h4>
+				</div>
+			</div>
+			<div class="rmpad col-12 col-lg-6 text-center">
+				<p class="thanks">
+					"Thanks for using our site and keep supporting us.."
+					<br>-- Kanav chadha
+					<i class="fa fa-hand-peace-o" aria-hidden="true"></i>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>	
+
+<script>
+	document.querySelector(".card-flip").classList.toggle("flip");
+</script>
+
+<%- include("partials/footer") %>

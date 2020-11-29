@@ -1,0 +1,123 @@
+<%- include("partials/header") %>
+<style>
+	body{
+		background: url("https://i.postimg.cc/CL0mRb20/4277097.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position:  center;
+		min-height: 100vh;
+	}
+	h1{
+		font-weight: bold;
+		color: white;
+		margin-bottom: 20px;
+		text-shadow: 0 2px 8px black;
+	}
+</style>
+
+<div class="mnp register-form mx-2">
+	<h1 class="register">SignUp</h1>
+		<form action="/register" method ="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
+			<div class="form-group">
+				<input class="form-control" type="text" name="username" placeholder="username" required>	   <div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid username.
+				</div>
+			</div>
+			<div class="form-group">
+				<input class="form-control" type="password" name="password" placeholder="password" required min="6">   
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid password.
+				</div>
+			</div>
+			<div class="d-flex justify-content-between align-items-center">
+				<div class="form-group">
+				<input class="form-control" type="text" name="firstName" placeholder="First Name" required>		  <div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid FirstName.
+				</div>
+				</div>	
+				<div class="form-group">
+				<input class="form-control" type="text" name="lastName" placeholder="Last Name" required>       <div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid LastName.
+				</div>
+				</div>	
+			</div>
+			
+			<div class="form-group">
+				<input class="form-control" type="email" name="email" placeholder="Email-id e.g. hello@world.com" required>
+			    <div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid EmailId.
+				</div>
+			</div>
+			<div class="custom-file">
+			<input class="custom-file-input" id="customFile" name="image" type="file" accept="image/*" required>
+			<label class="custom-file-label" for="customFile">Choose Your Profile Pic</label>	
+			<div class="valid-feedback">
+				Looks good!
+			</div>
+			<div class="invalid-feedback">
+				  Please choose a valid Profile Picture.
+			</div>
+			</div>
+			<div class="form-group">
+				<textarea class="form-control" name="description" placeholder="Short Description" required></textarea>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please Describe yourself in few words.
+				</div>
+			</div>
+			<div class="form-group">
+				<input class="form-control" type="text" name="adminCode" placeholder="Admin Code (optional)">
+			</div>	
+			<div class="form-group">
+				<button class="btn btn-success btn-block regs">Submit</button>
+			</div>
+		</form>
+	</div>
+
+<script>
+// Add the following code if you want the name of the file appear on select
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+	
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+	
+</script>
+
+</body>
+</html>

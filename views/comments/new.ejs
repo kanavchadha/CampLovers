@@ -1,0 +1,28 @@
+<%- include("../partials/header") %>
+<style>
+	hr{
+		width: 45%;
+		text-align: center;
+		color: black;
+	}
+	h1.alg{
+		font-size: 36px; 
+		font-weight: bold;
+	}
+</style>
+<div class="register-form mnp">
+	<h1 class="text-center alg mb-5">Add a New Comment To : <strong><%= c["name"]%></strong></h1>
+	<form action="/campage/<%=c._id%>/comments" method="POST">
+	  <div class="form-group">
+		<input class="form-control" style="margin: auto auto;" name="comment[text]" type="text" placeholder="comment" required>
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary btn-block regs" style="margin: auto auto;">Submit<i class="fa fa-paper-plane" aria-hidden="true"></i>
+		</button>
+		</div>	
+	</form>  
+</div>
+<hr>
+  
+</body>
+</html>

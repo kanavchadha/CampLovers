@@ -1,0 +1,19 @@
+<%- include("../partials/header") %> 
+<style>
+	body{
+background-image: linear-gradient(to right, #92fe9d 0%, #00c9ff 100%);
+	}
+</style>
+<div class="page-wrap mnp">
+<h1 class="text-center notify">Notifications</h1>
+	<div class="text-center notify">
+		<% allNotifications.forEach(function(notification) { %>
+		<li>
+			<a class="middle" href="/campgrounds/<%= notification.campgroundId %>" style="text-decoration: none; color: #c44747;">
+				<%= notification.username %> created a new campground %>
+			</a>
+		</li>
+		<% }); %>
+	</div>
+	</div>
+<%- include("../partials/footer") %> 

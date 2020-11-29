@@ -1,0 +1,266 @@
+<%- include("../partials/header") %>
+<style>
+	.card-body{
+	background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+	}
+	.campTitle{
+		border-bottom: 1px solid #222;
+	}
+	em{
+		color: steelblue;
+		text-decoration: underline;
+	}
+	table.table{
+		box-shadow: 0 3px 10px black;
+	}
+	#map{
+		width: 96%;
+		height: 400px;
+		margin: 10px auto;
+	}	
+</style>
+
+<div class="mb-5">
+	<div class="row">
+		<div class="rmpad col-lg-4 mb-2 order-2 order-lg-1">
+			<div class="px-4" style="font-size: 1.5rem;"><strong>Location</strong></div>
+			<div id="map">
+				
+			</div>
+		</div>
+		<div class="rmpad col-lg-8 order-1 order-lg-2">
+			<div class="card">
+				<img class="img-responsive hgt" src="<%= cg["image"]%>"> 
+				<div class="card-body">
+					<div class="campTitle d-flex justify-content-between align-items-center mb-3">
+					  <h3 class="card-title"><strong><a href=""><%= cg["name"]%></a></strong></h3>
+					  <span class="price"> <i class="fa fa-inr" aria-hidden="true">
+						</i> <%=cg.price%>/night
+					  </span>	
+					</div>
+				
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<!-- Like Button -->
+					<form action="/campage/<%= cg._id %>/like" method="POST">
+						<div class="btn-group">
+						<% if (currUser && cg.likes.some(function (like) {
+							 return like.equals(currUser._id) })) { %>
+						 <button class="btn btn-sm btn-primary">
+						<span class="like"><i class="fa fa-thumbs-up"></i>Liked (<%= cg.likes.length %>)</span> 
+						</button>
+						<% } else { %>
+						<button class="btn btn-sm btn-secondary">
+						<span class="like"><i class="fa fa-thumbs-up"></i>Like (<%= cg.likes.length %>)</span> 
+						</button>
+						<% } %>
+						</div>
+					</form>
+				  <button type="button" class="btn btn-xs btn-primary like" data-toggle="modal" data-target="#campgroundLikes">
+					<span>Total likes: <i class="fa fa-thumbs-up"></i> <%= cg.likes.length %></span>
+				  </button>
+				 </div>
+
+		
+		<table class="table table-dark" style="margin-top: 5px;">
+			<tbody>
+			<tr>
+			 <td scope="row"><p class="card-text descn" style="color: white;"><%= cg["description"]%></p></td>
+			</tr>
+			</tbody>
+		</table>
+<!--here we check if currUser is not undefined and campground's id is matched with currUser.id -->
+			<div class="d-flex justify-content-between align-items-center">
+				<div class="campAuthor"> Submitted by ~ <em class="nam">
+					<a href="/users/<%=cg.author.id%>"><%=cg.author.username%></a>
+					</em>
+				</div>
+				<span class="pull-right">~<%= moment(cg.createdAt).fromNow()%></span>
+			</div>
+					
+		<!-- Update And Delete -->
+		<% if(currUser && cg.author.id.equals(currUser._id) || currUser && currUser.isAdmin) {%>
+			<div class="d-flex justify-content-between align-items-center mt-3">
+				<a href="/campage/<%=cg._id%>/edit" class="btn  btn-warning updel">Update</a>
+				<form class="disp" action="/campage/<%=cg._id%>?_method=DELETE" method="POST">
+					<button class="btn btn-danger updel">Delete</button>
+				</form>	
+			</div>
+		<% } %> 
+
+		  </div>	
+		 </div>
+			
+		<!--Review section-->
+            <div class="card reviews mt-4">
+                <div class="card-body">
+                    <% if (cg.rating === 0) { %>
+                    <h5>
+                        <em>No reviews yet.</em>
+                    </h5>
+                    <% } else { %>
+                    <div>
+						<span class="main-ratstar">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star <% if (cg.rating > 1.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (cg.rating > 2.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (cg.rating > 3.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (cg.rating > 4.5) { %> checked <% } %>"></span>
+						</span>	
+						<strong class="tr"><em style="color: steelblue;">(total reviews: <%= cg.reviews.length %>)</em></strong>
+					</div>
+                    <h5 class="mb-2" style="color: royalblue;">
+                        Current campground rating: <strong><%= cg.rating.toFixed(2) %></strong>
+                    </h5>
+					<span class="revHd">Latest reviews for this campground:</span>
+                    <hr style="margin-top: 0;">
+					<!-- first five reviews -->
+                    <% cg.reviews.slice(0, 5).forEach(function(review){ %>
+                    <div class="row">
+                        <div class="rmpad col-12 col-lg-4">
+							<span class="ratstar">
+                            <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %><%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
+							</span>
+							
+							<div> <h5> Review by: 
+								<span style="color: #2284e6;">
+									<%= review.author.username %>
+								</span>
+							</h5></div>
+							
+						<span>
+						<em style="color: steelblue;"><%= review.updatedAt.toDateString() %></em>
+						</span>
+							
+                        </div>
+                        <div class="rmpad col-12 col-lg-8" style="position: relative;" >
+							<i class="fa fa-quote-left lquote" aria-hidden="true"></i>
+                            <p class="tr quoted">
+								 <%= review.text %>
+                            </p>
+							<i class="fa fa-quote-right rquote pull-right" aria-hidden="true"></i>
+						<div class="pull-right">	
+                            <% if(currUser && review.author.id.equals(currUser._id)){ %>
+                            <a class="btn btn-xs btn-warning tr"
+                               href="/campage/<%=cg._id %>/reviews/<%=review._id %>/edit">Edit</a>
+                            <form id="delete-form" action="/campage/<%=cg._id %>/reviews/<%=review._id %>?_method=DELETE" method="POST" style="display: inline;">
+                                <input type="submit" class="btn btn-xs btn-danger tr" value="Delete">
+                            </form>
+                            <% } %>
+							</div>	
+                        </div>
+
+                    </div>
+                    <hr>
+                    <% }); %>
+                    <div class="mb-2">
+                        <h5> <a href="/campage/<%= cg._id %>/reviews">
+							<i class="fa fa-search" aria-hidden="true"></i>See all reviews</a>
+						</h5>
+                    </div>
+                    <% } %>
+                    <div>
+                        <a class="btn btn-primary newrev <% if (currUser && cg.reviews.some(function (review) {return review.author.id.equals(currUser._id)})) { %> disabled <% } %>" href="/campage/<%= cg._id %>/reviews/new">Write a New Review</a>
+                    </div>
+                </div>
+            </div>	
+			
+		<!-- Comment Section -->
+			<div class="my-4 mb-5 card commentbox">
+				<div class="card-header d-flex justify-content-between align-items-center px-4">
+					<h2 class="card-title" style="color: #c41040; font-weight: bold;text-shadow: 0 2px 3px #f73e5d;">Comments</h2>
+			  		<a href="/campage/<%= cg._id%>/comments/new" class="btn btn-sm btn-success">
+						<i class="fa fa-comments" aria-hidden="true"></i> write Comment
+					</a>
+				</div>
+				
+				<div class="card-body comm">
+					<% cg.comments.forEach(function(comm){ %>
+				<div class="row">
+					<div class="rmpad col-md-12">
+						<div class="d-flex justify-content-between">
+							<strong><span class="fnt-comm" style="color: purple;"><%= comm.author.username %> -</span></strong>
+						<span class="pull-right time-com"> ~ <%= moment(comm.createdAt).fromNow() %></span>
+						</div>
+						
+						<div class=" d-flex justify-content-between">
+							<p class="fnt-comm" style="display: inline;"><%= comm.text %></p>
+				
+						<div class="d-flex justify-content-end">
+				<%if(currUser && comm.author.id.equals(currUser._id) || currUser && currUser.isAdmin) { %>			
+					<a href="/campage/<%=cg._id%>/comments/<%=comm._id%>/edit" class="btn btn-xs btn-warning updel">Edit</a>
+					<form class="disp" action="/campage/<%=cg._id%>/comments/<%=comm._id%>?_method=DELETE" method="POST">
+						<button class="btn btn-xs btn-danger updel">Delete</button>
+					</form>
+				<%}%>	
+						</div>
+						
+					  </div>
+					</div>
+				</div>
+				<% }); %>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Campground Likes Modal -->
+<div id="campgroundLikes" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+				<h4 class="modal-title">Campground likes: <%= cg.likes.length %></h4>
+                <button type="button" class="close thlike" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th class="thlike">Liked by:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% cg.likes.forEach(function(like) { %>
+                        <tr>
+                           <td class="thlike"><span class="badge"><i class="fa fa-user"></i></span> <%= like.username %></td>
+                        </tr>
+                    <% }); %>
+                    <% if (cg.likes.length === 0) { %>
+                        <tr>
+                            <td><i class="fa fa-frown-o" aria-hidden="true"></i>
+							<em>No likes yet.</em></td>
+                        </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary thlike" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- include script for mapbox -->
+<script>
+	mapboxgl.accessToken = '<%-process.env.MAPBOX_TOKEN%>';
+	const map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+		center: [<%-cg.geometry.coordinates%>], // starting position [lng, lat]
+		zoom: 12 // starting zoom
+	});
+	
+	const title = '<%-cg.name%>';
+	const maplocation = '<%-cg.location%>';
+	
+	new mapboxgl.Marker()
+		.setLngLat([<%-cg.geometry.coordinates%>])
+		.setPopup(
+			new mapboxgl.Popup({offset: 20}).setHTML(`<h5> ${title} </h5> <div>${maplocation}</div>`)
+		)
+		.addTo(map);
+</script>
+<%- include("../partials/footer") %>
+

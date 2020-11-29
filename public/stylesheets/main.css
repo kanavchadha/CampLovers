@@ -1,0 +1,535 @@
+html{
+	width: 100% !important;
+}
+body{
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	max-width: 100%;
+	overflow-x: hidden;
+	min-height: 100vh;
+}
+	
+.checked {
+	color: #f7700f;
+}
+
+::selection {
+  color: white;
+   background: steelblue;
+  text-shadow: 0 1px 3.6px black;
+}
+
+/* Underline Animation  */
+a.middle:before {
+  height: 2px;
+  content: "";
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  background-color: #FFF;
+  visibility: hidden;
+  transform: scaleX(0);
+  transition: all 0.3s ease-in-out;
+} 
+a.middle:hover:before {
+	color: white;
+  visibility: visible;
+  transform: scaleX(1);
+}
+a.middle{
+	text-decoration: none;
+	color: white;
+	font-weight: bold;
+    position: relative;
+}
+
+nav.navbar{
+	position: fixed;
+	top: 0;
+	width: 100% !important;
+	left: 0;
+	z-index: 100;
+}
+
+div.mnp{
+	margin-top: 100px;
+}
+div.fmsg{
+	margin: auto 10px;
+	margin-top: 80px;
+}
+
+	h1.aboutus{
+		font-size: 3.5em;
+	}
+	i.fa.about{
+		border: 1px solid #bd3a5d;
+		border-radius: 32px;
+		text-align: center;
+		padding: 3px;
+		color: white;
+		background: #cf4066;
+		width: 35px;
+		margin: auto 16px;
+		font-size: 1.5em;
+	}
+	i.fa.about:hover{
+		cursor: pointer;
+		color: #e6e6e6;
+		
+	}
+	div.jumbotron.thanks{
+		box-shadow: 0 2px 6px black;
+		background: #e6e8eb;
+		width: 100%;
+		height: auto;
+		padding: 0;
+	}
+	div.pic{
+		background: url("https://www.michigan.org/sites/default/files/teasers/Covert%20%3A%20South%20Haven%20KOA.png");
+		width: 100%;
+		min-height: 350px;
+		background-size: cover;
+		background-position: center;
+		padding: 0;
+		margin: 0;
+	}
+	div.jumbotron.about{
+		background: url("https://puzl-production.s3.amazonaws.com/files/uploads/files/001/554/239/original/26.jpg?1487040906");
+		height: 280px;
+		width: 100%;
+		background-position: bottom; 
+	}
+	h4.mytagline{
+		color: white;
+		text-shadow: 0 2px 6px black;
+		font-size: 2.2em;
+		padding-top: 100px;
+		font-family: 'Niconne', cursive;
+	}
+	p.thanks{
+		color: white;
+		text-shadow: 0 2px 6px black;
+		font-size: 2.4em;
+		padding-top: 50px;
+		font-family: 'Courgette', cursive;
+	}
+	i.fa-hand-peace-o{
+		font-size: 2em;
+		text-align: center;
+		color: white;
+	}
+	div.abtme{
+		padding-top: 50px;
+	}
+	.main-ratstar{
+		font-size: 1.25rem;
+	}
+	div.card.border-primary{
+		box-shadow: 0 1px 1px rgba(0,0,0,0.08), 
+                0 2px 2px rgba(0,0,0,0.12), 
+                0 4px 4px rgba(0,0,0,0.16), 
+                0 8px 8px rgba(0,0,0,0.20);
+		border-radius: 50%;
+		width: 320px;
+		height: 320px;
+		margin: auto 25px;
+	}
+	img.myimg{
+		border-radius: 50%;
+		width: 320px;
+		height: 320px;
+	}
+	div.modal-dialog.su{
+		min-width: 68%;
+		min-height: 30%;
+	}
+	input.btn.su{
+		border-radius: 20px; 
+		font-weight: bold;
+	}
+	input.form-control.su{
+		width: 100%;
+		border-radius: 20px; 
+	}
+	a.navbar-brand{
+		font-weight: bold;
+		font-size: 1.36em;
+	}
+	a.nav-link{	
+		font-size: 1.26em;
+	}
+	div.infos{
+		margin-left: 10px;
+	}
+	.list-group.infos{
+		width: 80%;
+	}
+	span.views{
+		font-size: 1.5em;
+	}
+	div.info-but{
+		margin-top: 15px;
+	}
+	h1.card-header.index{
+		font-weight: 550;
+		text-shadow: 0 2px 4px #6b6967;
+		letter-spacing: 0;
+	}
+	hr.index{
+		background: #8f8e8d;
+	}
+	img.hgt.img-responsive{
+		width: 100%;
+		max-height: 460px;
+	}
+	button.btn.moreinfo{
+		border-radius: 32px;
+	}
+	h1.jumbo-text{
+		text-shadow: 0 2px 5px black; 
+		color: white;
+		font-size: 3.6rem; 
+		font-family: 'Philosopher', sans-serif;
+	}
+	#shadow{
+		text-shadow:  0  2px 6px  black; 
+		font-family: 'Vollkorn', serif;
+		color: #99ffcc;
+		font-size: 1.6rem;
+	}
+	div.marg{
+		margin-left: 30px;
+		margin-right: 30px;
+	}
+	img.size{
+		height: 280px;
+		width: 100%;
+		margin: 0;
+		transition: 0.5s;
+	}
+	img.size:hover{
+		transform: scale(1.3);
+		cursor: pointer;
+	}
+	div.rat{
+		font-size: 1.5em;
+	}
+	img.avatar.upof{
+		height: 300px;
+		width: 100%px;
+	}
+	div.card.uprof {
+		width: 68%;
+	}
+	div.card.wide{
+		width: 240px;
+		height: 160px;
+		overflow: hidden;
+	}
+	img.postImg{
+		width: 100%;
+		height: 100%;
+	}
+	/* div.mar-r{
+		margin-left: 22px;
+		margin-right: 65px;
+	} */
+	.commentbox{
+		box-shadow: 0 2px 8px grey;
+	}
+	.card.reviews{
+		box-shadow: 0 2px 8px grey;
+		background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+	}
+	.card-body.comm{
+		background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	}
+	.price{
+		color: #ad328f;
+		font-weight: 560;
+	}
+	.campAuthor{
+		font-weight: 560;
+	}
+	span.revHd{
+		font-weight: 600;
+	}
+	p.quoted
+	{
+		font-size: 1.12rem;
+	}
+	i.lquote{
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		font-size: 2.2em;
+		opacity: 0.2;
+		color: grey;
+	}
+	i.rquote{
+		position: absolute;
+		right: 0px;
+		bottom: 0px;
+		font-size: 2.2em;
+		opacity: 0.2;
+		color: grey;
+	}
+
+	em.nam{
+		font-size: 1.2em;
+	}
+	h1.newcamp{
+		text-shadow: 0 2px 6px black;
+		margin-bottom: 50px;
+	}
+	.register-form{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin: auto 15px;
+	}
+	.register-form form{
+		width: 100%;
+		box-sizing: border-box;
+		max-width: 34rem;
+	}
+	div.form-group{
+		width: 100%;
+	}
+	input.form-control{
+		width: 100%;
+		
+	}
+	div.custom-file{
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	textarea.form-control{
+		width: 100%;
+	}
+	button.btn.regs{
+		width: 100%;
+	}
+	p.lgup{
+		font-size: 20px;
+		text-shadow: 0 2px 6px black;
+	}
+	p.lgup span a{
+		text-shadow: 0 2px 8px black;
+		color: white;
+		font-weight: bold;
+	}
+	form.form-inline{
+		flex: 1;
+		max-width: 600px;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+	}
+	form.form-inline input.search{
+		margin-left: 10px;
+		flex: 1;
+		border-radius: 6px 0 0 6px;
+		padding: 6px;
+		border: none;
+		outline: none;
+	}
+	form.form-inline input.search-but{
+		padding: 5px 6px;
+		background-color: transparent;
+		border: 1px solid white;
+		color: white;
+		border-radius: 0px 6px 6px 0px;
+		outline: none;
+		transition: 0.3s;
+	}
+	form.form-inline input.search-but:hover{
+		background-color: white;
+		border-left-color: black;
+		color: black;
+	}
+	div.abtext{
+		font-size: 1.15em;
+	}
+	h1.notify{
+		font-weight: bold;
+		font-size: 65px;
+		text-decoration: underline;
+	}
+	div.notify{
+		margin-top: 50px;
+		font-size: 1.5em;
+	}
+	img.followers{
+		width: 100px;
+		height: 100px;
+	}
+	h1.followers{
+		color: steelblue;
+		font-size: 60px;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	div.followers{
+		padding-left: 500px;
+	}
+	h3.followers{
+		padding-left: 35px;
+	}
+	p.followers{
+		font-size: 0.8em;
+	}
+	span.badge.label-primary{
+		font-size: 1.4em;
+	}
+	/* .card-body.index > .badge{
+		visibility: hidden;
+		opacity: 0;
+  		transition: visibility 0s, opacity 0.5s linear;
+	}
+	.card-body.index:hover > .badge{
+		visibility: visible;
+		opacity: 1;
+	} */
+	div.revcard{
+		font-size: 1.3em;
+	}
+	p.revind{
+		font-size: 1.5em;
+	}
+	div.newrev{
+		width: 30%;
+	}
+
+	table.table.u_descp{
+		font-size: 1.2rem;
+		font-family: 'Acme', sans-serif;
+		letter-spacing: 1px;
+	}
+	a.editprof{
+		 width: 68%;
+		font-weight: bold;
+	}
+	div.searchbar{
+		padding: 10px;
+		border-bottom: 2px solid black;
+		box-shadow: 0 2px 1px rgba(0,0,0,0.09), 
+              0 4px 2px rgba(0,0,0,0.09), 
+              0 8px 4px rgba(0,0,0,0.09), 
+              0 16px 8px rgba(0,0,0,0.09),
+              0 32px 16px rgba(0,0,0,0.09);
+	}
+	
+	div.userlist{
+		border-top: 2px solid #641499; 
+		padding: 6px 20px;
+	}
+	a.su-name{
+		font-size: 1.5rem;
+		text-decoration: none;
+		color: #253b59;
+		transition: all 0.4s linear;
+  	}
+	a.su-name:hover{
+		color: #265782;
+		text-shadow: 0 1px 1px rgba(0,0,0,0.08), 
+                0 2px 2px rgba(0,0,0,0.12), 
+                0 4px 4px rgba(0,0,0,0.16), 
+                0 8px 8px rgba(0,0,0,0.20);
+		text-decoration: underline;
+	}
+	span.su-name{
+		font-size: 1.2rem;
+		color: rgba(89, 91, 94,0.5);
+	}
+	img.su-img{
+		border: 1px solid #d44261;
+		box-shadow: 0 1px 4px #c2b8ba,
+					0 1.5px 8px #c2b8ba,
+					0 2px 16px #c2b8ba;
+		height: 100px;
+		width: 100px;
+		border-radius: 50%;
+		transition: all 0.5s ease-in;
+	}
+	img.su-img:hover{
+		transform: scale(1.1);
+		box-shadow: 0 1px 4px grey,
+					0 2px 8px grey,
+					0 2.5px 16px grey;
+		border: 1px solid #432c47;
+	}
+
+/* footer */
+a.socialicons{
+	color: white;
+	text-decoration: none;
+}
+hr.deep-purple{
+	width: 20%;
+}
+.socialicons{
+	font-size: 1.2em;
+}
+i.socialicons{
+	transition: all 0.25s ease;
+}
+i.socialicons:hover{
+	color: #ae54dc;
+	transform: scale(1.15);
+	text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 800px){
+	div.marg{
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+	
+	div.fmsg{
+		margin-top: 64px;
+	}
+	h1.jumbo-text{
+		font-size: 2rem; 
+	}
+	#shadow{
+		font-size: 1rem;
+	}	
+}
+@media (max-width: 480px){
+	strong.newcamp{
+		display: none;	
+	}
+	.rmpad {
+		padding-right: 0px !important;
+		padding-left: 0px !important;
+	}
+	div.card.wide{
+		width: 138px;
+		height: 90px;
+	}
+}
+@media (max-width: 580px){
+	div.card.uprof {
+		width: 100%;
+	}
+	a.editprof{
+		width: 100%;
+	}
+}
+/* overriding some bootstrap classes */
+.row {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+@media (min-width: 576px){
+	.jumbotron {
+		padding: 2rem 1rem !important;
+	}
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	  <title>Camp Lovers</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	  <meta name="theme-color" content="#363b37" >
+	  
+	  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" >
+	  
+	  <!--  For Mapbox -->
+	  <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+	  <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+
+	  <!-- auto complete JQuery/AJAX -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	 <!-- autocomplete -->
+	 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	 
+	 <link rel="stylesheet" href="/stylesheets/main.css">
+	  
+	</head>
+	<body>
+		
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="/"><strong>CampLovers</strong></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+			  <li class="nav-item my-auto active">
+				<a class="nav-link" href="/campage">Home <span class="sr-only">(current)</span></a>
+			  </li>
+			  <li class="nav-item my-auto">
+				<a class="nav-link" href="/about">About</a>
+			  </li>
+			  <li>
+				<button class="btn btn-sm btn-light mt-lg-2" data-toggle="modal" data-target=".bd-example-modal-lg"> Map Cluster </button>	
+			  </li>
+			</ul>
+			<ul class="navbar-nav navbar-right">
+				 <li class="nav-item my-auto">
+				<a class="nav-link" href="/finduser">
+				<button type="button" class="btn btn-sm btn-outline-light" >Search a User</button> </a>
+			 </li>
+				<% if(!currUser){%>
+				<li class="active nav-item"><a class="nav-link" style="padding-right: 5px;">Not Login Yet!</a></li>
+				<li class="nav-item"><a  class="nav-link" href="/register"><i class="fa fa-user-plus" aria-hidden="true"></i>
+		SignUp</a></li>
+				<li class="nav-item"><a  class="nav-link" href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i>
+		Login</a></li>
+				<%  } else{ %>
+			<li class="nav-item dropdown">
+        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications <span class="badge">
+				<%= notifications.length %> </span></a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/notifications">view past Notifications</a>
+          <div class="dropdown-divider"></div>
+			<% notifications.forEach(function(notis){ %>
+				<a class="dropdown-item" href="/notifications/<%= notis.id%>"> <%= notis.username%> created a New Canpground </a>
+			<% }); %>
+        </div>
+      </li>
+		<li class="active nav-item"><a href="/users/<%=currUser.id%>" class="nav-link" ><i class="fa fa-user-circle-o" aria-hidden="true" style="padding-right: 5px;"></i>
+			<% if(currUser.isAdmin === true){ %>
+			<%= currUser.username%>(Admin)
+			<%} else{%>	
+			<%= currUser.username%>
+			<%}%></a></li>
+				<li class="nav-item"><a href="/logout"  class="nav-link" ><i class="fa fa-sign-out" aria-hidden="true"></i>
+		Logout</a></li> 
+				<%  } %>
+			</ul>
+		  </div>
+	</nav>
+		
+	<div class="fmsg">
+		<% if(error && error.length>0) {%>
+			<div class="alert alert-danger alert-dismissible">
+				<%=error%>
+				 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			</div>
+		<% } if(success && success.length>0) {%>
+			<div class="alert alert-success alert-dismissible">
+				<%=success%>
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			</div>
+		<%}%>	  
+	</div>
+
+	<div class="modal fade bd-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel">
+	  <div class="modal-dialog modal-lg">
+		<div class="modal-content">
+		   <div class="modal-header">
+			<h5 class="modal-title">Map Cluster</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div class="modal-body">
+			<div id="cl_map" style="width: 100%; height: 450px;">
+			</div>
+		  </div>	
+		</div>
+	  </div>
+	</div>	
+	
+	
+	<!-- Bootstrap 4 -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>		  
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+	
+<script>
+	AOS.init();
+	const mapboxToken = '<%-process.env.MAPBOX_TOKEN%>';
+</script>
+<script src="https://kit.fontawesome.com/074d5df97d.js" crossorigin="anonymous"></script>
+<!-- <script src="/utils/searchuser.js"></script> -->
+<script src="/utils/clustermap.js"></script>

@@ -1,0 +1,89 @@
+<%- include("partials/header")%>
+
+<div class="page-wrap">
+  <div class="searchbar">
+	<form action="/finduser" method="GET" class="su">
+			<div class="row">
+				<div class="rmpad col-9">
+					<div class="form-group">
+			  <input id="suggestion" class="form-control su" type="text" placeholder="search a user.." name="searchuser">
+					</div>
+				</div>
+				<div class="rmpad col-3">
+					<div class="form-group">
+						<input type="submit" class="btn btn-outline-success su" value="search">
+					</div>
+				</div>
+			</div>
+	</form>
+  </div>	
+	
+	<div class="mt-3">
+		<div class="row">
+			<div class="rmpad col-lg-8">
+		<% if(noMatch != null){ %>
+			<h1 class="text-center"><%=noMatch%> </h1>
+		<% } else if(users === null){ %>
+			<h2 class="text-center"> Search a user here..</h2>
+		<% } else {%>
+		<%	users.forEach(function(user) { %>
+			<div class="d-flex justify-content-between userlist" data-aos="fade-up" data-aos-duration="1500">	
+				<div>
+					<div><a href="/users/<%=user.id%>" class="su-name" data-toggle="popover" 
+					title="<%=user.firstName%> <%=user.lastName%>" data-content="Followers: <%=user.followers.length%>  Followings: <%=user.followings.length%>  Posts: <%=user.posts.length%>"> <%= user.username %> </a></div>
+					<span class="su-name"><%= user.firstName%> <%= user.lastName%></span>
+				</div>
+				<div class="">
+					<a href="/users/<%=user.id%>"> <img class="su-img" src="<%=user.image%>"> </a>
+				</div>
+			</div>
+		<% }); } %>
+			</div>
+			
+		</div> <!-- row -->
+	</div>
+
+</div>
+  
+<script>
+	
+$(document).ready(function(){
+   	 $('[data-toggle="popover"]').popover({
+	 placement : 'top',
+	 trigger: 'hover',
+	 });
+}); 
+
+	// AutoComplete
+// $(function(){
+	
+	// $("#suggestion").autocomplete({
+	// 	source: function(req,res){
+			
+	// 		$.ajax({
+	// 			url: "autocomplete/",
+	// 			dataType: "jsonp",
+	// 			type: "GET",
+	// 			data: req,
+	// 			success: function(data){
+	// 				console.log(data);
+	// 				res(data);
+					
+	// 			},
+	// 			error: function(err){
+	// 				console.log(err.status);
+	// 			}
+	// 		})
+	// 	},
+	// 	minLength: 1,
+	// 	select: function(event,ui){
+	// 		if(ui.item){
+	// 			$('#suggestion').val(ui.item.label);
+	// 		}	
+	// 	}
+	// });
+// });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<%- include("../partials/header") %>
+<style>
+	div.card.uprof{
+		border-radius: 0 0 25px 25px;
+	}
+	img.upof.avatar{
+		transition: all 0.3s ease;
+	}	
+	img.upof.avatar:hover {
+		transform: scale(1.5);
+	}
+	h2.card-header{
+		color: #325e85;
+		font-weight: 600;
+	}
+	h1.text-center{
+		font-weight: bold;
+		font-size: 45px;
+		color: steelblue;
+	}
+	a.card-title{
+		font-size: 1.25em;
+	}
+	div.foll{
+		font-weight: bold;
+		font-size: 1.32rem;
+		color: #213a94;
+		background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+		box-shadow: 0 2px 10px steelblue;
+	}
+	table.table{
+		 box-shadow: 0 1px 2px rgba(0,0,0,0.2), 
+                0 2px 4px rgba(0,0,0,0.2), 
+                0 4px 8px rgba(0,0,0,0.2), 
+                0 8px 16px rgba(0,0,0,0.2),
+                0 16px 32px rgba(0,0,0,0.2), 
+                0 32px 48px rgba(0,0,0,0.2);
+	}
+	div.myPosts{
+		background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+		box-shadow: 0 2px 24px grey;
+	}
+	
+</style>
+
+<div class="row">
+	<div class="rmpad col-lg-6">
+		<div class="card mb-4 uprof text-center">
+		<img src="<%=user.image%>" class="upof avatar" alt="User Profile Image">
+		<h2 class="card-header flname" style="text-transform: uppercase; font-weight: bold;"><%=user.firstName%> <%=user.lastName%></h2>
+		<div class="card-body">
+		<a class="card-title prof" href="mailto:<%=user.email%>"><%=user.email%></a>
+		</div>	
+		</div>
+		<p>
+		<% if(currUser && user.username === currUser.username){ %>	
+		<a href="/edituser/<%= user._id %>" class="btn btn-outline-primary editprof">Edit Profile</a>
+		<% } %>	
+		</p>
+	</div>
+	<div class="rmpad col-lg-6">
+		<table class="table u_descp">
+			<tbody>
+			<tr>
+			 <td scope="row">
+			<p class="u_descp">
+				<%=user.description%>
+			</p>
+			</td>
+			</tr>
+			</tbody>
+		</table>
+
+		<div class="my-3">
+			<% if(currUser){ %>
+			<% if(currUser.username !== user.username ) { %>
+			<% if(!user.followers.includes(currUser.id)){ %>
+	<a href="/follow/<%= user.id %>"><button class="btn btn-primary btn-lg follow">Follow <%= user.username %></button></a>
+			<%} else{ %>
+	<a href="/unfollow/<%= user.id %>"><button class="btn btn-outline-secondary btn-lg follow"> UnFollow </button></a>
+			 <%}%>
+			<% } %>
+			<% } %>
+		</div>
+		<div class="text-center foll py-2 mt-5">
+			<div class="d-flex justify-content-around">
+				<a href="/followers/<%=user.id%>" style="color: #2a58a8;"><span class="foll">Followers:  <%= user.followers.length %> </span></a>
+				<a href="/followings/<%=user.id%>" style="color: #2a58a8;"><span class="foll">Followings:  <%= user.followings.length %></span></a>
+				<span class="foll">Posts:  <%= user.posts.length %></span>
+			 </div>	
+		 </div>
+	</div>
+</div>
+<hr>
+	<h1 class="text-center mt-3" style="text-decoration: underline;">Posts</h1>
+	<div class="myPosts mb-5 py-3 px-2 d-flex justify-content-between align-items-center"> 
+		<% campgrounds.forEach(function(camp){ %>
+		<div class="card wide ">
+			<a href="/campage/<%=camp._id%>"> <img class="postImg" src="<%=camp.image%>"> </a>	
+		</div>
+		<%});%>
+	</div>
+
+<%- include("../partials/footer")%>

@@ -1,0 +1,113 @@
+<%- include("partials/header") %>
+<style>
+	body{
+		background: url("https://i.postimg.cc/1RfWx9qx/camping.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center;
+		height: 100vh;
+	}
+	h1{
+		font-size: 45px;
+		font-weight: bold;
+		color: white;
+		margin-bottom: 40px;
+		text-shadow: 0 2px 8px black;
+	}
+</style>
+<div class="register-form" style="text-align: center;">
+	<h1 class="register">Update Profile</h1>
+		<form action="/users/<%=fu.id%>?_method=PUT" method ="POST" enctype="multipart/form-data"
+		 class="needs-validation" novalidate > 
+			<div class="form-group">
+				<input class="form-control" style="margin: auto auto;" type="text" name="username" placeholder="username" value="<%= fu.username %>" required>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid username.
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col">
+				<div class="form-group">
+				<input class="form-control fn" type="text" name="firstName" placeholder="First Name" value="<%= fu.firstName %>"required>
+				 <div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid FirstName.
+				</div>
+			</div>	
+				</div>
+				<div class="col">
+				<div class="form-group">
+				<input class="form-control ln" type="text" name="lastName" value="<%= fu.lastName %>" placeholder="Last Name" required>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid LastName.
+				</div>
+			</div>	
+				</div>
+			</div>
+			<div class="form-group">
+				<input class="form-control" style="margin: auto auto;" type="email" name="email" placeholder="Email-id e.g. hello@world.com" value="<%= fu.email %>" required>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please choose a valid EmailId.
+				</div>
+			</div>
+			<div class="custom-file">
+			<input class="custom-file-input" id="customFile" name="image" type="file" accept="image/*">
+			<label class="custom-file-label" for="customFile">Choose Your Profile Pic</label>	
+			</div>
+			<div class="form-group">
+				<textarea class="form-control" style="margin: auto auto" name="description" placeholder="Short Description" required> <%= fu.description %> </textarea>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+				  Please Describe yourself in few words.
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<button class="btn btn-success btn-block regs" style="margin: auto auto; ">Submit</button>
+			</div>
+		</form>
+	</div>
+
+<script>
+// Add the following code if you want the name of the file appear on select
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+	
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+	
+</script>
+
+</body>
+</html>
