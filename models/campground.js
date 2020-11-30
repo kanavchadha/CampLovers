@@ -1,11 +1,10 @@
 var mongoose=require("mongoose");
 
 var campgroundSch = new mongoose.Schema({
-	name: String,
-	price: String,
-	image: String,
-	imageId: String,
-	description: String,
+	name: { type: String, required: [true,'Must Provide a Name']},
+	price: { type: String, required: [true,'Must Provide a Price']},
+	image: [{ url: String, Id: String}],
+	description: { type: String, required: [true,'Must Provide a Description']},
 	views: {
 		type: Number,
 		default: 0
@@ -16,7 +15,7 @@ var campgroundSch = new mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User"
 		},
-		username: String
+		username: { type: String, required: [true,'Must Created By Valid User.']}
 	},
 	comments: [
 		{

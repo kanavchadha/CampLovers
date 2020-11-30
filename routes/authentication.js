@@ -228,13 +228,13 @@ router.post("/forgot",function(req,res,next){
       var smtpTransport = nodemailer.createTransport({
         service: 'Gmail', 
         auth: {
-          user: 'kanavchadha56@gmail.com',
+          user: process.env.GMAIL,
           pass: process.env.GMAILPW
         }
       });
       var mailOptions = {
         to: user.email,
-        from: 'kanavchadha56@gmail.com',
+        from: process.env.GMAIL,
         subject: 'Node.js Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -252,6 +252,7 @@ router.post("/forgot",function(req,res,next){
     res.redirect('/forgot');
   });
 });
+
 router.get('/reset/:token', function(req, res) {
   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
     if (!user) {
@@ -261,6 +262,7 @@ router.get('/reset/:token', function(req, res) {
     res.render('reset', {token: req.params.token});
   });
 });
+
 router.post('/reset/:token', function(req, res) {
   async.waterfall([
     function(done) {
@@ -290,13 +292,13 @@ router.post('/reset/:token', function(req, res) {
       var smtpTransport = nodemailer.createTransport({
         service: 'Gmail', 
         auth: {
-          user: 'kanavchadha56@gmail.com',
+          user: process.env.GMAIL,
           pass: process.env.GMAILPW
         }
       });
       var mailOptions = {
         to: user.email,
-        from: 'kanavchadha56@gmail.com',
+        from: process.env.GMAIL,
         subject: 'Your password has been changed',
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'

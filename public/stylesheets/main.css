@@ -156,10 +156,10 @@ div.fmsg{
 	}
 	a.navbar-brand{
 		font-weight: bold;
-		font-size: 1.36em;
+		font-size: 1.32em;
 	}
 	a.nav-link{	
-		font-size: 1.26em;
+		font-size: 1.15rem;
 	}
 	div.infos{
 		margin-left: 10px;
@@ -229,9 +229,19 @@ div.fmsg{
 		height: 160px;
 		overflow: hidden;
 	}
+	a.postImg{
+		width: 100%;
+		height: 100%;
+		transition: 0.36s;
+	}
 	img.postImg{
 		width: 100%;
 		height: 100%;
+		object-fit: cover;
+		transition: 0.36s;
+	}
+	img.postImg:hover{
+		transform: scale(1.13);
 	}
 	/* div.mar-r{
 		margin-left: 22px;
@@ -424,7 +434,56 @@ div.fmsg{
               0 16px 8px rgba(0,0,0,0.09),
               0 32px 16px rgba(0,0,0,0.09);
 	}
-	
+	div.prevpics::-webkit-scrollbar{
+		height: 8px;
+	}
+	div.prevpics::-webkit-scrollbar-track {
+	  background: #f1f1f1;
+	}
+	div.prevpics::-webkit-scrollbar-thumb {
+	  background: #888;
+	}
+
+	div.prevpics{
+		display: flex;
+		max-height: 135px;
+		padding: 5px;
+		box-shadow: 0 20px 36px rgba(0,0,0,0.5);
+		margin: 10px auto;
+		overflow-x: scroll;
+		overflow-y: hidden;
+	}
+	.prevpic{
+		position: relative;
+		height: 110px;
+		width: 160px;
+		margin-right: 10px;
+		border-radius: 10px;
+		overflow: hidden;
+	}
+	.prevpic img{
+		width: 100%;
+		height: 100%;
+	}
+	.prevpic span{
+		position: absolute;
+		bottom: 5px;
+  		right: 5px;
+		cursor: pointer;
+		border: 1px solid #d4111e;
+		padding: 1px 3px;
+		border-radius: 5px;
+		background: whitesmoke;
+		font-size: 0.9rem;
+	}
+	label {
+		display: inline;
+		margin-bottom: 0 !important;
+	}
+
+	.prevpic span label i.fa.fa-trash{
+		color: #d4111e;
+	}
 	div.userlist{
 		border-top: 2px solid #641499; 
 		padding: 6px 20px;

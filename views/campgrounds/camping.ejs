@@ -92,7 +92,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 		<div class="card index" >
 			<strong> <h2 class="card-header index" style="color: #80207b;"><i style="color: black;" class="fas fa-campground"></i> <%=campg["name"] %></h2></strong>
 			<div style="overflow: hidden;">
-				<img class="size img-fluid img-responsive" src="<%= campg["image"] %>">
+				<img class="size img-fluid img-responsive" src="<%= campg.image[0].url %>">
 			</div>
 		
 		<div class="card-body index">

@@ -2,6 +2,7 @@
 <style>
 	div.card.uprof{
 		border-radius: 0 0 25px 25px;
+		overflow: hidden;
 	}
 	img.upof.avatar{
 		transition: all 0.3s ease;
@@ -93,10 +94,12 @@
 </div>
 <hr>
 	<h1 class="text-center mt-3" style="text-decoration: underline;">Posts</h1>
-	<div class="myPosts mb-5 py-3 px-2 d-flex justify-content-between align-items-center"> 
+	<div class="myPosts mb-5 py-3 px-2 d-flex justify-content-between align-items-center flex-wrap"> 
 		<% campgrounds.forEach(function(camp){ %>
 		<div class="card wide ">
-			<a href="/campage/<%=camp._id%>"> <img class="postImg" src="<%=camp.image%>"> </a>	
+			<a class="postImg" href="/campage/<%=camp._id%>">
+				<img class="postImg" src="<%=camp.image[0].url%>"> 
+			</a>	
 		</div>
 		<%});%>
 	</div>

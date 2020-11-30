@@ -10,26 +10,11 @@ var mapboxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 
 const geocoder = mapboxGeocoding({accessToken: process.env.MAPBOX_TOKEN});
 
-var storage = multer.diskStorage({
-  filename: function(req, file, callback) {
-    callback(null, Date.now() + file.originalname);  // this will create a name for our file, this include date stamp and its orignal name.
-  }
-});
-var imageFilter = function (req, file, cb) {
-    // accept image files only
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
-        return cb(new Error('Only image files are allowed!'), false);
-    }
-    cb(null, true);
-};
-var upload = multer({ storage: storage, fileFilter: imageFilter})
+const { storage } = require('../cloudinary');
+const { cloudinary } = require("../cloudinary");
 
-var cloudinary = require('cloudinary');
-cloudinary.config({ 
-  cloud_name: 'dzzb5loan', 
-  api_key: 313834315165587, 
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+const upload = multer({ storage });
+
 
 
 router.get("/campage",function(req,res){
@@ -77,28 +62,25 @@ router.get("/campage/:id",function(req,res){
 	});
 });
 
-router.post("/campage",middleware.isLoggedIn,upload.single('image'),function(req,res){
-  // .file.path is from multer and result object is from cloudinary, and this have onee secure URL which we have to strore in our Database.
-   cloudinary.v2.uploader.upload(req.file.path, async function(err, result) {
-      if(err) {
-        req.flash('error', err.message);
-        return res.redirect('back');
-      }
-      req.body.campground.image = result.secure_url;
-      req.body.campground.imageId = result.public_id;
-      req.body.campground.author = {
-        id: req.user._id,
-        username: req.user.username
-      } 
-	  try{  
-	    const geoData = await geocoder.forwardGeocode({
+router.post("/campage",middleware.isLoggedIn,upload.array('image'),async function(req,res){
+	try{
+		
+		req.body.campground.image = req.files.map(f => ({ url: f.path, Id: f.filename }));
+		
+		req.body.campground.author = {
+			id: req.user._id,
+			username: req.user.username
+		} 
+		
+		const geoData = await geocoder.forwardGeocode({
 		   query: req.body.campground.location,
 		   limit: 1
-	    }).send();
+		}).send();
 		  
 		let Campground = await new campground(req.body.campground);
 		Campground.geometry = geoData.body.features[0].geometry;
 		await Campground.save(); 
+		
 		let user = await User.findById(req.user._id).populate('followers').exec();
 		let newNotification = {
 			username: req.user.username,
@@ -117,40 +99,7 @@ router.post("/campage",middleware.isLoggedIn,upload.single('image'),function(req
 		  req.flash('error',err.message);
 		  res.redirect('back');
 	  }
-    });
 });
-
-// Likes Button
-router.post("/campage/:id/like", middleware.isLoggedIn,function (req, res){
-    campground.findById(req.params.id, function (err, foundCampground) {
-        if (err) {
-            console.log(err);
-            return res.redirect("/campage");
-        }
-
-        // check if req.user._id exists in foundCampground.likes
-        var foundUserLike = foundCampground.likes.some(function (like) {
-            return like.equals(req.user._id);
-        });
-
-        if (foundUserLike) {
-            // user already liked, removing like
-            foundCampground.likes.pull(req.user._id);
-        } else {
-            // adding the new user like
-            foundCampground.likes.push(req.user);
-        }
-
-        foundCampground.save(function (err) {
-            if (err) {
-                console.log(err);
-                return res.redirect("/campage");
-            }
-            return res.redirect("/campage/" + foundCampground._id);
-        });
-    });
-});
-
 
 // EDIT POST
 router.get("/campage/:id/edit",middleware.Authorization,function(req,res){
@@ -159,24 +108,16 @@ router.get("/campage/:id/edit",middleware.Authorization,function(req,res){
 		});	
 });
 
-router.put("/campage/:id",middleware.Authorization,upload.single('image'),function(req,res){
-	campground.findById(req.params.id,async function(err,campground){
-		if(err){
-			req.flash("error",err.message);
-			return res.redirect("back");
-		}
-		
-		if(req.file){
-			try{ // this is important for await (async).
-			    await cloudinary.v2.uploader.destroy(campground.imageId); 
-				// this allows us to finish this code first before going to next line.
-			    var result = await cloudinary.v2.uploader.upload(req.file.path);
-				campground.imageId=result.public_id;
-				campground.image=result.secure_url;
-			} catch(err){
-				req.flash("error",err.message);
-				res.redirect("back");
+router.put("/campage/:id",middleware.Authorization,upload.array('image'),async function(req,res){
+	try{
+		const fCampground = await campground.findById(req.params.id);
+		const imgs = req.files.map(f => ({ url: f.path, Id: f.filename }));
+		fCampground.image.push(...imgs);
+		if (req.body.deleteImages) {
+			for (let Id of req.body.deleteImages) {
+				await cloudinary.uploader.destroy(Id);
 			}
+			await fCampground.updateOne({ $pull: { image: { Id: { $in: req.body.deleteImages } } } });
 		}
 			
 		const geoData = await geocoder.forwardGeocode({
@@ -184,17 +125,20 @@ router.put("/campage/:id",middleware.Authorization,upload.single('image'),functi
 		   limit: 1
 		}).send();
 		
-		campground.name = req.body.name;
-		campground.price = req.body.price;
-		campground.description = req.body.description;
-		campground.location = req.body.location;
-		campground.geometry = geoData.body.features[0].geometry;
+		fCampground.name = req.body.name;
+		fCampground.price = req.body.price;
+		fCampground.description = req.body.description;
+		fCampground.location = req.body.location;
+		fCampground.geometry = geoData.body.features[0].geometry;
 		
-		await campground.save();
+		await fCampground.save();
 		
-		req.flash("success","your Post is Updated successfully");
-		res.redirect("/campage/"+campground._id);
-	});
+		req.flash("success","your Post has been updated Successfully");
+		res.redirect("/campage/"+fCampground._id);	
+	}catch(err){
+		req.flash("error",err.message);
+		res.redirect("back");
+	}
 });
 
 // DELETE post
@@ -237,6 +181,37 @@ router.post("/views/:id",function(req,res){
 		// console.log("viewed a campground");
 		res.redirect("/campage/"+vc._id);
 	});
+});
+
+// Likes Button
+router.post("/campage/:id/like", middleware.isLoggedIn,function (req, res){
+    campground.findById(req.params.id, function (err, foundCampground) {
+        if (err) {
+            console.log(err);
+            return res.redirect("/campage");
+        }
+
+        // check if req.user._id exists in foundCampground.likes
+        var foundUserLike = foundCampground.likes.some(function (like) {
+            return like.equals(req.user._id);
+        });
+
+        if (foundUserLike) {
+            // user already liked, removing like
+            foundCampground.likes.pull(req.user._id);
+        } else {
+            // adding the new user like
+            foundCampground.likes.push(req.user);
+        }
+
+        foundCampground.save(function (err) {
+            if (err) {
+                console.log(err);
+                return res.redirect("/campage");
+            }
+            return res.redirect("/campage/" + foundCampground._id);
+        });
+    });
 });
 
 // campgrounds geojson data for cluster map

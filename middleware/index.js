@@ -4,14 +4,17 @@ var Comment = require("../models/comments");
 var Review = require("../models/review");
 var User = require("../models/user");
 var middlewareObj={};
-middlewareObj.Authorization=function(req,res,next)
-{
+
+middlewareObj.Authorization = function(req,res,next){
 	if(req.isAuthenticated())
 	{
 		campground.findById(req.params.id,function(err,Fcampground){
 			if(err){
-				req.flash("error","campground Not Found!");
+				req.flash("error","Something went wrong!");
 				console.log(err);
+				res.redirect("back");
+			} else if(!Fcampground){
+				req.flash("error","Campground Not Found!");
 				res.redirect("back");
 			} else{
 				if(Fcampground.author.id.equals(req.user._id) || req.user.isAdmin)  // Authorization.
@@ -25,7 +28,7 @@ middlewareObj.Authorization=function(req,res,next)
 		});
 	} else{
 		req.flash("error","You need to be Login to do that!");
-		res.redirect("back");
+		res.redirect("/login");
 	}
 }
 middlewareObj.comAuthorization=function(req,res,next)
@@ -34,7 +37,11 @@ middlewareObj.comAuthorization=function(req,res,next)
 	{
 		Comment.findById(req.params.cid,function(err,Fcomment){
 			if(err){
+				req.flash("error","Something went wrong!");
 				console.log(err);
+				res.redirect("back");
+			} else if(!Fcomment){
+				req.flash("error","Comment Not Found!");
 				res.redirect("back");
 			} else{
 				if(Fcomment.author.id.equals(req.user._id) || req.user.isAdmin)  // Authorization.
@@ -48,7 +55,7 @@ middlewareObj.comAuthorization=function(req,res,next)
 		});	
 	} else{
 		req.flash("error","You need to be Login to that!");
-		res.redirect("back");
+		res.redirect("/login");
 	}
 }
 
@@ -65,6 +72,7 @@ middlewareObj.checkReviewOwnership = function(req, res, next) {
     if(req.isAuthenticated()){
         Review.findById(req.params.review_id, function(err, foundReview){
             if(err || !foundReview){
+				req.flash("error","Review Not Found!");
                 res.redirect("back");
             }  else {
                 // does user own the comment?
@@ -78,7 +86,7 @@ middlewareObj.checkReviewOwnership = function(req, res, next) {
         });
     } else {
         req.flash("error", "You need to be logged in to do that");
-        res.redirect("back");
+        res.redirect("/login");
     }
 };
 
@@ -103,7 +111,7 @@ middlewareObj.checkReviewExistence = function (req, res, next) {
         });
     } else {
         req.flash("error", "You need to login first.");
-        res.redirect("back");
+        res.redirect("/login");
     }
 };
 
@@ -125,7 +133,7 @@ middlewareObj.isSame = function(req,res,next){
 	}
 	else{
 		req.flash("error","You need to be Login to that!");
-		res.redirect("back");
+		res.redirect("/login");
 	}
 }
 

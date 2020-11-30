@@ -27,12 +27,12 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<input class="form-control" type="password" name="password" placeholder="password" required min="6">   
+				<input class="form-control" type="password" name="password" placeholder="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>   
 				<div class="valid-feedback">
 					Looks good!
 				</div>
 				<div class="invalid-feedback">
-				  Please choose a valid password.
+				  Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters
 				</div>
 			</div>
 			<div class="d-flex justify-content-between align-items-center">

@@ -1,15 +1,13 @@
 <%- include("../partials/header") %>
 <style>
 	body{
-		background: url("https://cdn.pixabay.com/photo/2016/03/30/02/57/camping-1289930__340.jpg");
+		background: url("https://i.postimg.cc/PJGV3YJX/night-campfire-night.jpg");
  		background-size: cover;
+		min-height: 100vh;
 	}
 
-	hr{
-		width: 45%;
-		text-align: center;
-	}
 </style>
+
 <div class="register-form mnp">
 	<h1 class="text-center" style="color: white; margin-top: 20px; margin-bottom: 30px; font-size: 36px; font-weight: bold; text-decoration: underline;">Update: <%=editcamp.name %></h1>
 	<form action="/campage/<%= editcamp._id%>?_method=PUT" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
@@ -35,6 +33,17 @@
 		<input class="custom-file-input" id="customFile" name="image" type="file" accept="image/*">
 		<label class="custom-file-label" for="customFile">Choose file</label>	
 		</div>
+		<div class="prevpics">
+			<% editcamp.image.forEach((img,i) => { %>
+				<div class="prevpic">
+					<img src="<%=img.url%>">
+					<span> 
+					<label for="image-<%=i%>"> <i class="fa fa-trash"></i> </label>
+					<input id="image-<%=i%>" name="deleteImages[]" type="checkbox" value="<%=img.Id%>">
+					</span>
+				</div>
+			<% }) %>
+		</div>
 		<div class="form-group">
 			<textarea class="form-control" style="margin: auto auto;" name="description" type="text" required><%=editcamp.description%></textarea>
 		<div class="valid-feedback">
@@ -46,14 +55,18 @@
 		</div>
 		<div class="form-group">
 		<input class="form-control" style="margin: auto;" name="location" id="location" type="text"  placeholder="Location" value="<%=editcamp.location%>" required>
-		
+		<div class="valid-feedback">
+			Looks good!
+		</div>
+		<div class="invalid-feedback">
+          Please choose a valid camp location.
+        </div>
 		</div>	
 		<div class="form-group">
 		<button class="btn btn-primary btn-block regs" style="margin: auto auto">Submit</button>
 		</div>	
 	</form>  
 </div>
-<hr style="color: gray;">
   
 <script>
 // Add the following code if you want the name of the file appear on select
@@ -80,4 +93,6 @@ $(".custom-file-input").on("change", function() {
   }, false);
 })();
 </script>
-<%- include("../partials/footer") %>t
+
+</body>
+</html>
