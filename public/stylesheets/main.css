@@ -9,7 +9,9 @@ body{
 	overflow-x: hidden;
 	min-height: 100vh;
 }
-	
+.page-wrap{
+	min-height: 100vh;
+}	
 .checked {
 	color: #f7700f;
 }
@@ -381,21 +383,29 @@ div.fmsg{
 	}
 	h1.followers{
 		color: steelblue;
-		font-size: 60px;
 		font-weight: bold;
 		text-decoration: underline;
 	}
 	div.followers{
-		padding-left: 500px;
+		max-width: 40rem;
+		margin: auto;
+		padding: 5px; 
 	}
-	h3.followers{
-		padding-left: 35px;
+	div.follow-list{
+		border: 1px solid #d6d6d6;
+		border-radius: 6px;
+		padding: 5px 0;
+	}
+	h4.followers{
+		padding-left: 10px;
 	}
 	p.followers{
-		font-size: 0.8em;
+		padding: 5px;
+		text-align: center;
+		font-size: 1rem;
 	}
 	span.badge.label-primary{
-		font-size: 1.4em;
+		font-size: 1.2rem;
 	}
 	/* .card-body.index > .badge{
 		visibility: hidden;

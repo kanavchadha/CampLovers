@@ -1,16 +1,24 @@
 <%- include("../partials/header")%>
 
-<div class="page-wrap mnp">
-	<h1 class="mb-5 text-center followers"> Followings </h1>
-	<div class="followers">
-	<% for(const foll of follArr){%>
-		<div class="d-flex bd-highlight mb-3">
-		<a href="/users/<%=foll.id%>"><img class="rounded-circle followers" src="<%= foll.image%>"></a>	
-		<h3 class="followers align-self-center"><span class="followers"><a href="/users/<%=foll.id%>">@ <%= foll.username%></a>
-			<p style="color: steelblue; opacity: 0.68;" class="followers"> (<%=foll.firstName%> <%=foll.lastName%>)</p></span></h3>
-		</div>	
-	<%}%>
-	</div>
+<div class="page-wrap">
+    <h1 class="mb-3 text-center followers">Followings</h1>
+    <div class="followers">
+        <% for(const foll of follArr){%>
+        <div class="d-flex align-items-center justify-content-around mb-3 follow-list">
+            <a href="/users/<%=foll.id%>">
+                <img class="rounded-circle followers" src="<%= foll.image%>">
+            </a>
+            <h4 class="followers">
+                <span class="followers">
+                    <a href="/users/<%=foll.id%>">@ <%= foll.username%></a>
+                    <p style="color: steelblue; opacity: 0.68;" class="followers">
+                        (<%=foll.firstName%> <%=foll.lastName%>)
+                    </p>
+				</span>
+            </h4>
+        </div>
+        <%}%>
+    </div>
 </div>
 
 

@@ -72,13 +72,17 @@
 			</tbody>
 		</table>
 
-		<div class="my-3">
+		<div class="my-3 mt-5 text-center">
 			<% if(currUser){ %>
 			<% if(currUser.username !== user.username ) { %>
 			<% if(!user.followers.includes(currUser.id)){ %>
-	<a href="/follow/<%= user.id %>"><button class="btn btn-primary btn-lg follow">Follow <%= user.username %></button></a>
+			<a href="/follow/<%= user.id %>">
+				<button class="btn btn-primary btn-lg follow">Follow <%= user.username %></button>
+			</a>
 			<%} else{ %>
-	<a href="/unfollow/<%= user.id %>"><button class="btn btn-outline-secondary btn-lg follow"> UnFollow </button></a>
+			<a href="/unfollow/<%= user.id %>">
+				<button class="btn btn-secondary btn-lg follow">UnFollow <%=user.username%> </button>
+			</a>
 			 <%}%>
 			<% } %>
 			<% } %>

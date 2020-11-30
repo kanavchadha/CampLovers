@@ -3,6 +3,7 @@ var router = express.Router(); // way of exporting routes.
 var campground = require("../models/campground");
 var User = require("../models/user");
 var Review = require("../models/review");
+var Comment = require("../models/comments");
 var middleware = require("../middleware");
 var Notification = require("../models/notification");
 var multer = require("multer");
@@ -149,22 +150,24 @@ router.delete('/campage/:id',middleware.Authorization, function(req, res) {
       return res.redirect("back");
     }
     try {
-        await cloudinary.v2.uploader.destroy(campground.imageId);
-		 // deletes all reviews associated with the campground
-         Review.remove({"_id": {$in: campground.reviews}}, function (err) {
-            if (err) {
-         	    console.log(err);
-            	return res.redirect("/campage");
-             }
-        campground.remove();
-        req.flash('success', 'Campground deleted successfully!');
-        res.redirect('/campage');
-		 });	 
+		for (let img of campground.image) {
+			await cloudinary.uploader.destroy(img.Id);
+		}
+		// deletes all reviews associated with the campground
+        await Review.remove({"_id": {$in: campground.reviews}});
+		// deletes all comments associated with the campground
+        await Comment.remove({"_id": {$in: campground.reviews}});
+        // Removing from user's posts list.
+		const user = await User.findById(req.user._id);
+		user.posts.pull(campground._id);
+		await user.save();
+		
+		await campground.remove();
+		req.flash('success', 'Campground deleted successfully!');
+		res.redirect('/campage');
     } catch(err) {
-        if(err) {
-          req.flash("error", err.message);
-          return res.redirect("back");
-        }
+      	req.flash("error", err.message);
+        return res.redirect("/campage");
     }
   });
 });
