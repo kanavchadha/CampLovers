@@ -57,10 +57,10 @@ router.post("/register",upload.single('image'),function(req,res){
 							imageId: req.body.imageId,
 							description: req.body.description,
 						   });
-	if(req.body.adminCode === 'ILoveMusicArijitSingh')
-	{
-		newuser.isAdmin = true;
-	}
+	// if(req.body.adminCode === 'ILoveMusicArijitSingh')
+	// {
+	// 	newuser.isAdmin = true;
+	// }
 	User.register(newuser,req.body.password,function(err,user){
 		if(err)
 		{
@@ -82,40 +82,6 @@ router.post("/register",upload.single('image'),function(req,res){
 });
 });
 
-router.put("/users/:id",middleware.isSame,upload.single('image'),function(req,res){
-	User.findById(req.params.id,async function(err,Fuser){
-		if(err){
-			req.flash("error",err.message);
-			res.redirect("back");
-		} else {
-			if(req.file){
-				try{
-					await cloudinary.v2.uploader.destroy(Fuser.imageId); // this allows us to finish this code first before going to next line.
-					var result = await cloudinary.v2.uploader.upload(req.file.path);
-					Fuser.imageId=result.public_id;
-					Fuser.image=result.secure_url;
-				} catch(err){
-					req.flash("error",err.message);
-					res.redirect("back");
-				}
-			}
-			Fuser.username = req.body.username;
-			Fuser.firstName = req.body.firstName;
-			Fuser.lastName = req.body.lastName;
-			Fuser.email = req.body.email;
-			Fuser.description = req.body.description;
-			if(req.body.adminCode === 'ILoveMusicArijitSingh')
-			{
-				Fuser.isAdmin = true;
-			}
-			Fuser.save();
-			req.flash("success","Your Profile is Updated successfully.");
-			res.redirect("/users/"+Fuser._id);
-		}
-	});
-});
-
-
 router.get("/login",function(req,res){
 	res.render("login");
 });
@@ -133,60 +99,61 @@ router.get("/logout",function(req,res){
 	res.redirect("/campage");
 });
 
-// search a user
-router.get("/finduser",function(req,res){
-	var noMatch=null;
-	// console.log(req.query.searchuser);
-	if(req.query.searchuser)
-	{
-		const regex = new RegExp(escapeRegex(req.query.searchuser),'gi');	
-		User.find({username: regex},function(err,foundusers){
+// User Profile
+router.get("/users/:id",function(req,res){
+	User.findById(req.params.id,function(err,foundUser){
+		if(err){
+			req.flash("error","Something went Wrong!");
+			res.redirect("/campage");
+		} 
+		campground.find().where('author.id').equals(foundUser._id).exec(function(err,camps){
 			if(err){
-				res.redirect("back"); 
-				req.flash("error",err.message);
-			} else{
-			if(foundusers.length <= 0){
-				noMatch="Sorry, No user has found with Name: "+ req.query.searchuser;
-				res.render("usersList",{noMatch: noMatch, users: foundusers});
-			} else{
-				res.render("usersList",{noMatch: noMatch, users: foundusers}); // req.user contains the id and username of the registered user.
+			req.flash("error","Something went Wrong!");
+			res.redirect("/campage");
+			}	
+			res.render("user/show",{user: foundUser, campgrounds: camps});	
+		});
+	});
+});
+
+// User Profile Edit
+router.get("/edituser/:id",middleware.isSame,async function(req,res){
+	try{
+		let user = await User.findById(req.params.id);
+		res.render("editProfile",{fu: user});
+	} catch(err) {
+		 req.flash("error",err.message);
+		res.redirect("back");
+	}
+});
+
+router.put("/users/:id",middleware.isSame,upload.single('image'),function(req,res){
+	User.findById(req.params.id,async function(err,Fuser){
+		if(err){
+			req.flash("error",err.message);
+			res.redirect("back");
+		} else {
+			if(req.file){
+				try{
+					await cloudinary.v2.uploader.destroy(Fuser.imageId); // this allows us to finish this code first before going to next line.
+					var result = await cloudinary.v2.uploader.upload(req.file.path);
+					Fuser.imageId=result.public_id;
+					Fuser.image=result.secure_url;
+				} catch(err){
+					req.flash("error",err.message);
+					return res.redirect("back");
 				}
 			}
-		});
-	} else{
-		res.render("usersList",{noMatch: noMatch, users: null});
-	}
-		
-	// else{
-	// 	req.flash("error","Please Provide a valid input!");
-	// 	return res.redirect("/back");
-	// }   
-});
-		
-// AutoComplete Suggestion
-router.get("/autocomplete/",function(req,res){
-	var patt = new RegExp(escapeRegex(req.query.searchuser),'gi');
-	var suggestUser = User.find({username: patt},{'username': 1}).sort({"updated_at": -1}).sort({"created_at": -1}).limit(20);
-	suggestUser.exec(function(err,data){
-		var result=[];
-		if(!err){
-			if(data && data.length && data.length > 0){
-				data.forEach(function(su){
-					let obj = {
-						id: su._id,
-						label: su.username
-					};
-					result.push(obj);
-				});
-			}
-			// console.log(data);
-			res.jsonp(result);
+			Fuser.username = req.body.username;
+			Fuser.firstName = req.body.firstName;
+			Fuser.lastName = req.body.lastName;
+			Fuser.email = req.body.email;
+			Fuser.description = req.body.description;
+			await Fuser.save();
+			req.flash("success","Your Profile has Updated successfully.");
+			res.redirect("/users/"+Fuser._id);
 		}
-		else{
-			console.log(err);
-		}
-	})
-	
+	});
 });
 
 function escapeRegex(text)
@@ -238,7 +205,7 @@ router.post("/forgot",function(req,res,next){
         subject: 'Node.js Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'https://' + req.headers.host + '/reset/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
@@ -313,33 +280,60 @@ router.post('/reset/:token', function(req, res) {
   });
 });
 
-// User Profile
-router.get("/users/:id",function(req,res){
-	User.findById(req.params.id,function(err,foundUser){
-		if(err){
-			req.flash("error","Something went Wrong!");
-			res.redirect("/campage");
-		} 
-		campground.find().where('author.id').equals(foundUser._id).exec(function(err,camps){
+// search a user
+router.get("/finduser",function(req,res){
+	var noMatch=null;
+	// console.log(req.query.searchuser);
+	if(req.query.searchuser)
+	{
+		const regex = new RegExp(escapeRegex(req.query.searchuser),'gi');	
+		User.find({username: regex},function(err,foundusers){
 			if(err){
-			req.flash("error","Something went Wrong!");
-			res.redirect("/campage");
-			}	
-			res.render("user/show",{user: foundUser, campgrounds: camps});	
+				res.redirect("back"); 
+				req.flash("error",err.message);
+			} else{
+			if(foundusers.length <= 0){
+				noMatch="Sorry, No user has found with Name: "+ req.query.searchuser;
+				res.render("usersList",{noMatch: noMatch, users: foundusers});
+			} else{
+				res.render("usersList",{noMatch: noMatch, users: foundusers}); // req.user contains the id and username of the registered user.
+				}
+			}
 		});
-	});
-});
-// User Profile Edit
-router.get("/edituser/:id",middleware.isSame,async function(req,res){
-	try{
-		let user = await User.findById(req.params.id);
-		res.render("editProfile",{fu: user});
-	} catch(err) {
-		 req.flash("error",err.message);
-		res.redirect("back");
+	} else{
+		res.render("usersList",{noMatch: noMatch, users: null});
 	}
+		
+	// else{
+	// 	req.flash("error","Please Provide a valid input!");
+	// 	return res.redirect("/back");
+	// }   
 });
-// PUT route is above
+		
+// AutoComplete Suggestion
+router.get("/autocomplete/",function(req,res){
+	var patt = new RegExp(escapeRegex(req.query.searchuser),'gi');
+	var suggestUser = User.find({username: patt},{'username': 1}).sort({"updated_at": -1}).sort({"created_at": -1}).limit(20);
+	suggestUser.exec(function(err,data){
+		var result=[];
+		if(!err){
+			if(data && data.length && data.length > 0){
+				data.forEach(function(su){
+					let obj = {
+						id: su._id,
+						label: su.username
+					};
+					result.push(obj);
+				});
+			}
+			// console.log(data);
+			res.jsonp(result);
+		}
+		else{
+			console.log(err);
+		}
+	})
+});
 
 // followers
 router.get("/follow/:id",middleware.isLoggedIn,async function(req,res){

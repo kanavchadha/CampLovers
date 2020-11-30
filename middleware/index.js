@@ -123,7 +123,7 @@ middlewareObj.isSame = function(req,res,next){
 				req.flash("error",err.message);
 				res.redirect("back");
 			}
-			if(fuser.equals(req.user._id)){
+			if(fuser._id.equals(req.user._id)){
 				next();
 			} else {
 				req.flash("error","You are not Allowed to do that!");
