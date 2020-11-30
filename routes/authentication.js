@@ -351,6 +351,7 @@ router.get("/follow/:id",middleware.isLoggedIn,async function(req,res){
 		res.redirect("back");
 	}
 });
+
 // notifications
 router.get("/notifications",middleware.isLoggedIn,async function(req,res){
 	try{
@@ -381,30 +382,29 @@ router.get("/notifications/:id",middleware.isLoggedIn,async function(req,res){
 // Followers
 router.get("/followers/:id",middleware.isLoggedIn,async function(req,res){
 	try{
-	let user = await User.findById(req.params.id);
-	let arr = [];	
-	for(const foll of user.followers){	
-		let fu = await User.findById(foll);
-		arr.push(fu);
-	};
-	res.render("user/followers",{follArr: arr});
-	} catch(err)
-	  {
-		  req.flash('error',err.message);
-		  res.redirect("back");
-	  }
+		let user = await User.findById(req.params.id);
+		let arr = [];	
+		for(const foll of user.followers){	
+			let fu = await User.findById(foll);
+			arr.push(fu);
+		};
+		res.render("user/followers",{follArr: arr});
+	} catch(err){
+		req.flash('error',err.message);
+		res.redirect("back");
+	}
 });
 
 // Followings
 router.get("/followings/:id",middleware.isLoggedIn,async function(req,res){
 	try{
-	let user = await User.findById(req.params.id);
-	let arr = [];	
-	for(const foll of user.followings){	
-		let fu = await User.findById(foll);
-		arr.push(fu);
-	}
-	res.render("user/followings",{follArr: arr});
+		let user = await User.findById(req.params.id);
+		let arr = [];	
+		for(const foll of user.followings){	
+			let fu = await User.findById(foll);
+			arr.push(fu);
+		}
+		res.render("user/followings",{follArr: arr});
 	} catch(err)
 	  {
 		  req.flash('error',err.message);
@@ -417,26 +417,13 @@ router.get("/unfollow/:id",middleware.isLoggedIn,async function(req,res){
 	try{
 		let user = await User.findById(req.params.id);
 		let ufuser = await User.findById(req.user._id);
-		for(var i=0; i < user.followers.length; i++)
-		{
-			if(user.followers[i] == req.user.id)
-			{
-				// console.log("inside the followers if block");
-				user.followers.splice(i,1);
-				break;
-			}	
-		}
-		user.save();
-		for(var i=0; i < ufuser.followers.length; i++)
-		{
-			if(ufuser.followings[i] == req.params.id)
-			{
-				console.log("inside the followings if block");
-				ufuser.followings.splice(i,1);
-				break;
-			}	
-		}
-		ufuser.save();
+		
+		user.followers.pull(ufuser._id);
+		await user.save();
+		
+		ufuser.followings.pull(user._id);
+		await ufuser.save();
+		
 		res.redirect("/users/"+req.params.id);
 	} catch(err){
 		req.flash('error',err.message);

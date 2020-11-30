@@ -1,16 +1,19 @@
 <%- include("../partials/header") %> 
 <style>
 	body{
-background-image: linear-gradient(to right, #92fe9d 0%, #00c9ff 100%);
+background-color: #1c002e;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 1000'%3E%3Cg fill-opacity='0.91'%3E%3Ccircle fill='%231c002e' cx='50' cy='0' r='50'/%3E%3Cg fill='%231d0331' %3E%3Ccircle cx='0' cy='50' r='50'/%3E%3Ccircle cx='100' cy='50' r='50'/%3E%3C/g%3E%3Ccircle fill='%231f0534' cx='50' cy='100' r='50'/%3E%3Cg fill='%23210737' %3E%3Ccircle cx='0' cy='150' r='50'/%3E%3Ccircle cx='100' cy='150' r='50'/%3E%3C/g%3E%3Ccircle fill='%2323093b' cx='50' cy='200' r='50'/%3E%3Cg fill='%23250b3e' %3E%3Ccircle cx='0' cy='250' r='50'/%3E%3Ccircle cx='100' cy='250' r='50'/%3E%3C/g%3E%3Ccircle fill='%23280c41' cx='50' cy='300' r='50'/%3E%3Cg fill='%232a0e45' %3E%3Ccircle cx='0' cy='350' r='50'/%3E%3Ccircle cx='100' cy='350' r='50'/%3E%3C/g%3E%3Ccircle fill='%232c1048' cx='50' cy='400' r='50'/%3E%3Cg fill='%232e114b' %3E%3Ccircle cx='0' cy='450' r='50'/%3E%3Ccircle cx='100' cy='450' r='50'/%3E%3C/g%3E%3Ccircle fill='%2330134f' cx='50' cy='500' r='50'/%3E%3Cg fill='%23331552' %3E%3Ccircle cx='0' cy='550' r='50'/%3E%3Ccircle cx='100' cy='550' r='50'/%3E%3C/g%3E%3Ccircle fill='%23351756' cx='50' cy='600' r='50'/%3E%3Cg fill='%23371859' %3E%3Ccircle cx='0' cy='650' r='50'/%3E%3Ccircle cx='100' cy='650' r='50'/%3E%3C/g%3E%3Ccircle fill='%23391a5d' cx='50' cy='700' r='50'/%3E%3Cg fill='%233c1c61' %3E%3Ccircle cx='0' cy='750' r='50'/%3E%3Ccircle cx='100' cy='750' r='50'/%3E%3C/g%3E%3Ccircle fill='%233e1e64' cx='50' cy='800' r='50'/%3E%3Cg fill='%23401f68' %3E%3Ccircle cx='0' cy='850' r='50'/%3E%3Ccircle cx='100' cy='850' r='50'/%3E%3C/g%3E%3Ccircle fill='%2342216c' cx='50' cy='900' r='50'/%3E%3Cg fill='%2345236f' %3E%3Ccircle cx='0' cy='950' r='50'/%3E%3Ccircle cx='100' cy='950' r='50'/%3E%3C/g%3E%3Ccircle fill='%23472573' cx='50' cy='1000' r='50'/%3E%3C/g%3E%3C/svg%3E");
+background-attachment: fixed;
+background-size: contain;
 	}
 </style>
 <div class="page-wrap mnp">
 <h1 class="text-center notify">Notifications</h1>
-	<div class="text-center notify">
-		<% allNotifications.forEach(function(notification) { %>
-		<li>
-			<a class="middle" href="/campgrounds/<%= notification.campgroundId %>" style="text-decoration: none; color: #c44747;">
-				<%= notification.username %> created a new campground %>
+	<div class="text-center notify px-2">
+		<% allNotifications.forEach(function(notification,ind) { %>
+		<li style="list-style: none;">
+			<a class="middle" href="/campgrounds/<%= notification.campgroundId %>" style="text-decoration: none; color: lightgrey;">
+				#<%=ind+1%> <%= notification.username %> created a new campground %>
 			</a>
 		</li>
 		<% }); %>
